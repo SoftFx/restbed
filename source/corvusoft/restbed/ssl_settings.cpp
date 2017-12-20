@@ -78,6 +78,21 @@ namespace restbed
         return m_pimpl->m_single_diffie_hellman_use_enabled;
     }
     
+    bool SSLSettings::has_enabled_verify_peer( void ) const
+    {
+        return m_pimpl->m_verify_peer_enabled;
+    }
+    
+    bool SSLSettings::has_enabled_verify_client_once( void ) const
+    {
+        return m_pimpl->m_verify_client_once_enabled;
+    }
+    
+    bool SSLSettings::has_enabled_verify_fail_if_no_peer_cert( void ) const
+    {
+        return m_pimpl->m_verify_fail_if_no_peer_cert_enabled;
+    }
+    
     uint16_t SSLSettings::get_port( void ) const
     {
         return m_pimpl->m_port;
@@ -121,6 +136,11 @@ namespace restbed
     string SSLSettings::get_certificate_authority_pool( void ) const
     {
         return m_pimpl->m_certificate_authority_pool;
+    }
+    
+    string SSLSettings::get_session_id(void) const
+    {
+        return m_pimpl->m_session_id_context;
     }
     
     void SSLSettings::set_port( const uint16_t value )
@@ -211,5 +231,25 @@ namespace restbed
     void SSLSettings::set_temporary_diffie_hellman( const Uri& value )
     {
         m_pimpl->m_temporary_diffie_hellman = String::remove( "file://", value.to_string( ), String::CASE_INSENSITIVE );
+    }
+    
+    void SSLSettings::set_session_id(const std::string & value)
+    {
+        m_pimpl->m_session_id_context = value;
+    }
+    
+    void SSLSettings::set_verify_peer_enabled(const bool value)
+    {
+        m_pimpl->m_verify_peer_enabled = value;
+    }
+    
+    void SSLSettings::set_verify_client_once_enabled(const bool value)
+    {
+        m_pimpl->m_verify_client_once_enabled = value;
+    }
+    
+    void SSLSettings::set_verify_fail_if_no_peer_cert_enabled(const bool value)
+    {
+        m_pimpl->m_verify_fail_if_no_peer_cert_enabled = value;
     }
 }

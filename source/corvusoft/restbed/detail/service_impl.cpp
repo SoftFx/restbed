@@ -251,6 +251,20 @@ namespace restbed
                 options = ( m_ssl_settings->has_enabled_single_diffie_hellman_use( ) ) ? options | asio::ssl::context::single_dh_use : options;
                 m_ssl_context->set_options( options );
                 
+                asio::ssl::verify_mode mode = 0;
+                mode = (m_ssl_settings->has_enabled_verify_fail_if_no_peer_cert()) ? mode | asio::ssl::verify_fail_if_no_peer_cert : mode;
+                mode = (m_ssl_settings->has_enabled_verify_client_once()) ? mode | asio::ssl::verify_client_once : mode;
+                mode = (m_ssl_settings->has_enabled_verify_peer()) ? mode | asio::ssl::verify_peer : asio::ssl::verify_none;
+                m_ssl_context->set_verify_mode(mode);
+                
+                auto session_id_context = m_ssl_settings->get_session_id();
+                
+                if (not session_id_context.empty())
+                {
+                    // asio::ssl::context doesn't have such functionality so use direct function
+                    ::SSL_CTX_set_session_id_context(m_ssl_context->native_handle(), reinterpret_cast<const unsigned char*>(session_id_context.c_str()), session_id_context.size());
+                }
+                
                 if ( not m_ssl_settings->get_bind_address( ).empty( ) )
                 {
                     const auto address = address::from_string( m_ssl_settings->get_bind_address( ) );

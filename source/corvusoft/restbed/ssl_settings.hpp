@@ -60,6 +60,12 @@ namespace restbed
             
             bool has_enabled_single_diffie_hellman_use( void ) const;
             
+            bool has_enabled_verify_peer(void) const;
+            
+            bool has_enabled_verify_client_once(void) const;
+            
+            bool has_enabled_verify_fail_if_no_peer_cert(void) const;
+            
             //Getters
             uint16_t get_port( void ) const;
             
@@ -78,6 +84,8 @@ namespace restbed
             std::string get_temporary_diffie_hellman( void ) const;
             
             std::string get_certificate_authority_pool( void ) const;
+            
+            std::string get_session_id( void ) const;
             
             //Setters
             void set_port( const uint16_t value );
@@ -115,6 +123,14 @@ namespace restbed
             void set_private_rsa_key( const Uri& value );
             
             void set_temporary_diffie_hellman( const Uri& value );
+            
+            void set_session_id( const std::string& value );
+            
+            void set_verify_peer_enabled(const bool value);
+            
+            void set_verify_client_once_enabled(const bool value);
+            
+            void set_verify_fail_if_no_peer_cert_enabled(const bool value);
             
             //Operators
             
