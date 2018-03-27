@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <cstdint>
+#include <set>
 
 //Project Includes
 
@@ -83,7 +84,9 @@ namespace restbed
             
             std::string get_temporary_diffie_hellman( void ) const;
             
-            std::string get_certificate_authority_pool( void ) const;
+            std::set<std::string> get_certificate_authority_pools( void ) const;
+
+			std::set<std::string> get_trusted_certififcate_files(void) const;
             
             std::string get_session_id( void ) const;
             
@@ -114,7 +117,13 @@ namespace restbed
             
             void set_certificate_chain( const Uri& value );
             
-            void set_certificate_authority_pool( const Uri& value );
+            void add_certificate_authority_pool( const Uri& value );
+
+			void remove_certificate_authority_pool(const Uri& value);
+
+			void add_trusted_certificate_file(const Uri& value);
+
+			void remove_trusted_certificate_file(const Uri& value);
             
             void set_passphrase( const std::string& value );
             

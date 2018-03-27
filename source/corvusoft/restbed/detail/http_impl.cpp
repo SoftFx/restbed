@@ -171,15 +171,20 @@ namespace restbed
             
             if ( settings not_eq nullptr )
             {
-                const auto pool = settings->get_certificate_authority_pool( );
-                
-                if ( pool.empty( ) )
+                const auto pools = settings->get_certificate_authority_pools( );
+				const auto files = settings->get_trusted_certififcate_files( );
+				                
+                if ( pools.empty() && files.empty() )
                 {
                     context.set_default_verify_paths( );
                 }
                 else
                 {
-                    context.add_verify_path( settings->get_certificate_authority_pool( ) );
+					for (auto pool : pools)
+						context.add_verify_path( pool );
+
+					for (auto file : files)
+						context.load_verify_file( file );
                 }
                 
                 socket = make_shared< asio::ssl::stream< asio::ip::tcp::socket > >( *request->m_pimpl->m_io_service, context );

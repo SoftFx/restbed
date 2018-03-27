@@ -15,6 +15,7 @@
 //System Namespaces
 using std::string;
 using std::unique_ptr;
+using std::set;
 
 //Project Namespaces
 using restbed::detail::SSLSettingsImpl;
@@ -133,10 +134,15 @@ namespace restbed
         return m_pimpl->m_temporary_diffie_hellman;
     }
     
-    string SSLSettings::get_certificate_authority_pool( void ) const
+    set<string> SSLSettings::get_certificate_authority_pools( void ) const
     {
-        return m_pimpl->m_certificate_authority_pool;
+        return m_pimpl->m_certificate_authority_pools;
     }
+
+	set<string> SSLSettings::get_trusted_certififcate_files(void) const
+	{
+		return m_pimpl->m_trusted_certificate_files;
+	}
     
     string SSLSettings::get_session_id(void) const
     {
@@ -208,12 +214,27 @@ namespace restbed
         m_pimpl->m_certificate_chain = String::remove( "file://", value.to_string( ), String::CASE_INSENSITIVE );
     }
     
-    void SSLSettings::set_certificate_authority_pool( const Uri& value )
+    void SSLSettings::add_certificate_authority_pool( const Uri& value )
     {
-        m_pimpl->m_certificate_authority_pool = String::remove( "file://", value.to_string( ), String::CASE_INSENSITIVE );
+        m_pimpl->m_certificate_authority_pools.insert(String::remove("file://", value.to_string(), String::CASE_INSENSITIVE));
     }
     
-    void SSLSettings::set_passphrase( const string& value )
+	void SSLSettings::remove_certificate_authority_pool(const Uri& value)
+	{
+		m_pimpl->m_certificate_authority_pools.erase(String::remove("file://", value.to_string(), String::CASE_INSENSITIVE));
+	}
+
+	void SSLSettings::add_trusted_certificate_file(const Uri& value)
+	{
+		m_pimpl->m_trusted_certificate_files.insert(String::remove("file://", value.to_string(), String::CASE_INSENSITIVE));
+	}
+
+	void SSLSettings::remove_trusted_certificate_file(const Uri& value)
+	{
+		m_pimpl->m_trusted_certificate_files.erase(String::remove("file://", value.to_string(), String::CASE_INSENSITIVE));
+	}
+
+	void SSLSettings::set_passphrase(const string& value)
     {
         m_pimpl->m_passphrase = value;
     }

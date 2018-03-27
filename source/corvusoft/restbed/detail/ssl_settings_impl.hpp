@@ -8,6 +8,7 @@
 #include <string>
 #include <memory>
 #include <cstdint>
+#include <set>
 
 //Project Includes
 
@@ -67,7 +68,9 @@ namespace restbed
             
             std::string m_certificate_chain = "";
             
-            std::string m_certificate_authority_pool = "";
+			std::set<std::string> m_certificate_authority_pools = {};
+
+			std::set<std::string> m_trusted_certificate_files = {};
             
             std::string m_temporary_diffie_hellman = "";
             

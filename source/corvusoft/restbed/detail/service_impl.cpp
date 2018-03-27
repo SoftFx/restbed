@@ -205,12 +205,21 @@ namespace restbed
                     m_ssl_context->use_tmp_dh_file( filename );
                 }
                 
-                filename = m_ssl_settings->get_certificate_authority_pool( );
+                auto pools = m_ssl_settings->get_certificate_authority_pools( );
                 
-                if ( not filename.empty( ) )
+                if ( not pools.empty( ) )
                 {
-                    m_ssl_context->add_verify_path( filename );
+					for (auto pool : pools)
+						m_ssl_context->add_verify_path(pool);
                 }
+
+				auto files = m_ssl_settings->get_trusted_certififcate_files( );
+
+				if ( not files.empty() )
+				{
+					for (auto file : files)
+						m_ssl_context->load_verify_file(file);
+				}
                 
                 filename = m_ssl_settings->get_certificate_chain( );
                 
